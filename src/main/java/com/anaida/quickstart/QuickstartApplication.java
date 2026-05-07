@@ -7,6 +7,9 @@ import com.anaida.quickstart.services.impl.ColourPrinterImpl;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import javax.sql.DataSource;
 
 @SpringBootApplication
 public class QuickstartApplication implements CommandLineRunner {
@@ -31,6 +34,7 @@ public class QuickstartApplication implements CommandLineRunner {
 	*/
 
 
+	/* 2: environment vriables as beans using Pizza Config in whihc we use configurtionProperties annotation
 	private PizzaConfig pizzaConfig;
 
 	public QuickstartApplication(PizzaConfig pizzaConfig){
@@ -53,5 +57,25 @@ public class QuickstartApplication implements CommandLineRunner {
 
 		);
 	}
+
+	 */
+
+
+	private final DataSource dataSource;
+
+	public QuickstartApplication(final DataSource dataSource){
+		this.dataSource = dataSource;
+	}
+	public static void main(String[] args) {
+		SpringApplication.run(QuickstartApplication.class, args);
+	}
+
+	@Override
+	public void run(final String... args){
+		System.out.println("DataSource: "+dataSource.toString());
+		final JdbcTemplate restTemplate = new JdbcTemplate(dataSource);
+		restTemplate.execute("select 1");
+	}
+
 
 }
