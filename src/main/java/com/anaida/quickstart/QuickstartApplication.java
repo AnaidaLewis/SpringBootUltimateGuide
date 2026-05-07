@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Logger;
 import com.anaida.quickstart.config.PizzaConfig;
 import com.anaida.quickstart.services.ColourPrinter;
 import com.anaida.quickstart.services.impl.ColourPrinterImpl;
+import lombok.extern.java.Log;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,6 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import javax.sql.DataSource;
 
 @SpringBootApplication
+@Log
 public class QuickstartApplication implements CommandLineRunner {
 	/* 1 : Printer example for explaining config file and beans
 	private ColourPrinter colourPrinter;
@@ -60,7 +62,7 @@ public class QuickstartApplication implements CommandLineRunner {
 
 	 */
 
-
+	/* 3. to show how h2 database is connected
 	private final DataSource dataSource;
 
 	public QuickstartApplication(final DataSource dataSource){
@@ -76,6 +78,22 @@ public class QuickstartApplication implements CommandLineRunner {
 		final JdbcTemplate restTemplate = new JdbcTemplate(dataSource);
 		restTemplate.execute("select 1");
 	}
+	 */
 
+    private final DataSource dataSource;
+
+    public QuickstartApplication(final DataSource dataSource){
+        this.dataSource = dataSource;
+    }
+    public static void main(String[] args) {
+        SpringApplication.run(QuickstartApplication.class, args);
+    }
+
+    @Override
+    public void run(final String... args){
+        System.out.println("DataSource: "+dataSource.toString());
+        final JdbcTemplate restTemplate = new JdbcTemplate(dataSource);
+        restTemplate.execute("select 1");
+    }
 
 }
