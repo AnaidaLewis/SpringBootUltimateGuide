@@ -1,9 +1,9 @@
-package com.anaida.quickstart.dao;
+package com.anaida.quickstart.dao.impl;
 
-import com.anaida.quickstart.dao.impl.BookDaoImpl;
 import com.anaida.quickstart.domain.Book;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -36,5 +36,15 @@ public class BookDaoImplTests {
                 eq("234-1-2453-2453-0"), eq("Titanic"), eq(1L)
         );
 
+    }
+
+    @Test
+    public void testThatFindOneBookGeneratesCorrectSql() {
+        underTest.findOne("978-1-2345-6789-0");
+        verify(jdbcTemplate).query(
+                eq("SELECT isin, title, AUTHOR_ID from books WHERE isin = ? LIMIT 1"),
+                ArgumentMatchers.<BookDaoImpl.BookRowMapper>any(),
+                eq("978-1-2345-6789-0")
+        );
     }
 }
